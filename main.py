@@ -6,6 +6,11 @@ import base64
 
 st.set_page_config(page_title="Historical Staking Data", page_icon="👽️", layout="wide", initial_sidebar_state="auto")
 
+logo_path = "/Users/kilianboshoff/Pictures/Icon2.png"
+
+with st.container():
+    st.image(logo_path, width=200, caption=None)
+
 st.title("Get Historical Data for Staking Providers on StakingRewards.com")
 
 st.markdown("""
@@ -17,9 +22,9 @@ today = date.today()
 
 url = 'https://api.stakingrewards.com/public/query'
 
-api_key = st.text_input("Enter your API key", type="password") 
+api_key = st.text_input("Enter your API key", type="password") # add an input box for API key
 
-headers = {"X-API-Key": api_key} 
+headers = {"X-API-Key": api_key} # use the API key in the headers
 
 query = """
 query getHistoricalMetrics($slugs:[String!],$limit:Int,$offset:Int, $metricKeys:[String!],$timeStart:Date, $isActive:Boolean){
@@ -99,14 +104,29 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-start_date = st.date_input("Enter the starting Date", value=today - timedelta(days=30))
-end_date = st.date_input("Enter the ending Date", value=today)
+# Add a checkbox for toggling between date range and today's data
+today_only = st.checkbox("Get Today's Data Only")
+# If the checkbox is selected, disable the date input boxes
+if today_only:
+    start_date_disabled = st.date_input("Enter the starting Date", value=today, key="start_date", disabled=True)
+    end_date_disabled = st.date_input("Enter the ending Date", value=today, key="end_date", disabled=True)
+else:
+    start_date = st.date_input("Enter the starting Date", value=today - timedelta(days=30), key="start_date")
+    end_date = st.date_input("Enter the ending Date", value=today, key="end_date")
+
+
 
 compare_button = st.button("Get my Data!")
 
 st.markdown("---")
 
+# ... (rest of the code remains the same)
+
 if compare_button:
+    # Check if today_only is selected
+    if today_only:
+        start_date = today
+        end_date = today
     slugs = slugs_input.split(',')
     metrics = metrics_input.split(',')
 
@@ -116,7 +136,7 @@ if compare_button:
     current_date = start_date
     processed_days = 0
 
-    progress_bar = st.progress(0) 
+    progress_bar = st.progress(0)  # Create a progress bar
 
     with st.spinner("Loading..."):
         while current_date <= end_date:
@@ -125,9 +145,9 @@ if compare_button:
             current_date += timedelta(days=1)
             processed_days += 1
 
-            
+            # Update the progress bar
             progress = processed_days / total_days
-            progress_bar.progress(progress)
+            progress_bar.progress(progress)  # Update the progress bar value
 
     prepare_and_display_data(assets_data, metrics)
-
+    st.markdown("---")
