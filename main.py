@@ -6,10 +6,7 @@ import base64
 
 st.set_page_config(page_title="Historical Staking Data", page_icon="👽️", layout="wide", initial_sidebar_state="auto")
 
-logo_path = "/Users/kilianboshoff/Pictures/Icon2.png"
 
-with st.container():
-    st.image(logo_path, width=200, caption=None)
 
 st.title("Get Historical Data for Staking Providers on StakingRewards.com")
 
