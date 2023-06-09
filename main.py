@@ -77,7 +77,7 @@ def prepare_and_display_data(assets_data, metricKeys):
     st.write(data_df)
 
 
-slugs_input = st.text_input("Enter the Slugs of each Provider (comma-separated without a space)", "allnodes,p2p-validator")
+slugs_input = st.text_input("Enter the Slugs of each Provider (comma-separated without a space)", "p2p-validator,kiln")
 metrics_input = st.text_input("Enter the Metrics you are looking for (comma-separated without a space)", "staking_wallets,assets_under_management")
 
 st.markdown("""
